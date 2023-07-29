@@ -1,8 +1,9 @@
 import openml
 import sklearn
 import numpy as np
+from config import *
 
-## for missing value handling
+## imported packages
 import pandas as pd # for signature of functions to use output of openml.datasets.get_dataset(), otherwise only numpy used
 import os # store files in directory
 
@@ -41,19 +42,21 @@ def preprocess_data(X: pd.DataFrame, y: np.ndarray, cats: list, standardize: boo
 
     # check 
     assert X.shape == X_shape
-
+    
+    
     # transform numerical variables
     numericals = X[:, np.invert(cats)]
     scaler = sklearn.preprocessing.StandardScaler()
     scaler.fit(numericals)
     numericals = scaler.transform(numericals)
     X[:, np.invert(cats)] = numericals
-
+    
     # check 
     assert X.shape == X_shape
 
     # change datatype
-    X = np.array(X, dtype=np.float64)
+    X = np.array(X, dtype=np.float32)
+    y = np.array(y, dtype=np.float32)
     
     return [X, y]
 
@@ -67,7 +70,7 @@ def train_test_split(X: np.ndarray, y: np.ndarray, split_criterion: float) -> li
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size=split_criterion, random_state=42)
 
     # save on hard-drive 
-    path = os.getcwd()
+    path = path_origin
     os.makedirs(os.path.join(path, "data"), exist_ok=True)
     os.chdir(os.path.join(path, "data"))
     np.save("X_train.npy", X_train)
@@ -77,7 +80,8 @@ def train_test_split(X: np.ndarray, y: np.ndarray, split_criterion: float) -> li
     np.savetxt("X_train.csv", X_train, delimiter=",")
     np.savetxt("X_test.csv", X_test, delimiter=",") 
     np.savetxt("y_train.csv", y_train, delimiter=",") 
-    np.savetxt("y_test.csv", y_test, delimiter=",")  
+    np.savetxt("y_test.csv", y_test, delimiter=",") 
+    os.chdir(path_origin) 
    
     return 
 
@@ -95,11 +99,11 @@ def main(check_missings: bool):
     raw_data = preprocess_data(np.array(dataset[0]), dataset[1], dataset[2], True)
     
     ## split
-    train_test_split(raw_data[0], raw_data[1], 0.8)
+    train_test_split(raw_data[0], raw_data[1], 0.2)
     
 
 if __name__ == "__main__":
-    main(False)
+    main(missings_check)
 
     
 
