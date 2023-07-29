@@ -4,9 +4,11 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from config import *
 from XGBoost import get_data
+import sklearn
 
 ## 
-import os
+import os # save things in folders
+import time # check runtime
 
 class MLP(nn.Module):
     def __init__(self, input_size: 20, output_size: 1, hidden_layer_size: int, hidden_layers: int):
@@ -68,7 +70,14 @@ def get_data_loader(dataset: Dataset, batch_size: int):
 
     return data_loader
 
-def trainLoop(train_loader: DataLoader, val_loader: DataLoader, model: MLP, criterion: torch.nn, criterion_val: torch.nn, params: dict, safe_descent: bool):
+def trainLoop(train_loader: DataLoader, 
+              val_loader: DataLoader, 
+              model: MLP, 
+              criterion: torch.nn, 
+              criterion_val: torch.nn, 
+              params: dict, 
+              safe_descent: bool,
+              safe_model: bool = False) -> list():
     """
     Train Loop to optimize model parameters
     """
@@ -88,7 +97,7 @@ def trainLoop(train_loader: DataLoader, val_loader: DataLoader, model: MLP, crit
 
     # Early stopping parameters
     patience = params["patience"]  
-    best_val_loss = float('inf')
+    best_val_loss = 0
     epochs_without_improvement = 0
 
 
@@ -105,9 +114,6 @@ def trainLoop(train_loader: DataLoader, val_loader: DataLoader, model: MLP, crit
 
             # forward + backward + optimize
             forward = model(inpts)
-            #print(forward)
-            #print(forward.size())
-            #print(targets.size())
             loss = criterion(forward.squeeze(), targets.squeeze()) 
             loss.backward()
             # torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=3.0) # gradient clipping; no exploding gradient
@@ -124,7 +130,7 @@ def trainLoop(train_loader: DataLoader, val_loader: DataLoader, model: MLP, crit
             pred = model.forward(X)
             val_loss = criterion_val(pred, y)
 
-        print(f"epoch {b} Val Score: {val_loss}")
+        #print(f"epoch {b} Val Score: {val_loss}")
 
         if safe_descent:
             os.chdir(path_origin)
@@ -134,32 +140,81 @@ def trainLoop(train_loader: DataLoader, val_loader: DataLoader, model: MLP, crit
             np.savetxt("val_results_best_model.csv", result, delimiter=",")
             os.chdir(path)
 
-        """
+        
         # Check for early stopping
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
+        if val_loss >= best_val_loss:
+            best_val_loss = val_loss.detach().cpu()
             epochs_without_improvement = 0
+
+            # reset early stopping counter
+            epochs_without_improvement = 0
+
         else:
             epochs_without_improvement += 1
-
             if epochs_without_improvement >= patience:
-                print(f"Validation loss did not improve for {patience} epochs. Early stopping.")
-                # save parameters a and score
-                return [params["learning_rate"], params["weight_decay"], params["batch_size"], best_val_loss]
-        """
+                #print(f"Validation loss did not improve for {patience} epochs. Early stopping.")
+                # save parameters and score
+
+                # save final optimized model
+                if safe_model:
+                    # create folder
+                    path = os.path.join(path_origin, "models", "optimizd_MLP.pth")
+                    torch.save(model.state_dict(), path)
+                    print("Model saved!")
+                    os.chdir(path_origin)
+
+
+                return [params["learning_rate"], 
+                        params["weight_decay"], 
+                        params["batch_size"], 
+                        params["hidden_layer_size"], 
+                        params["hidden_layers"], 
+                        val_loss.item()]
+        
         
 
-def acc (pred: torch.tensor, truth: torch.tensor):
+def acc (pred: torch.tensor, truth: torch.tensor) -> torch.tensor: 
+    """
+    calculate accuracy from predicted class probabilities and ground truth labels
+    """
 
     # get predictions of model 
     acc = (pred > 0.5).float()
     
+    # calculate acc
     acc = torch.sum(acc == truth)/len(pred)
-    
 
     return acc
-                                  
-if __name__ == "__main__":
+
+def f1_score(pred: torch.tensor, truth: torch.tensor) -> torch.tensor: 
+    """
+    calculate f1 score from predicted class probabilities and ground truth labels
+    """
+    # get function from sklearn
+    f1 = sklearn.metrics.f1_score
+
+    # get predictions of model 
+    class_pred = (pred > 0.5).float()
+    class_pred = class_pred.numpy()
+    truth = truth.numpy()
+
+    # predict
+    score = f1(class_pred, truth)
+
+    # back to torcvh fro train loop
+    score = torch.tensor(score)
+
+    return score
+
+def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
+    """
+    Implements random search over the selected hyperparameters:
+    learning rate
+    weight decay
+    batch_size
+    hidden_layer_size 
+    hidden_layers
+    """
     # get the data 
     X_train, y_train, X_test, y_test = get_data()
 
@@ -167,23 +222,96 @@ if __name__ == "__main__":
     val_criterion = 0.90 
     train_dataset = Dataset(X_train[0:round(val_criterion*len(X_train)),:], y_train[0:round(val_criterion*len(y_train)),:])
     val_dataset = Dataset(X_train[round(val_criterion*len(X_train)):, :], y_train[round(val_criterion*len(X_train)):,:])
+    train_dataset_full = Dataset(X_train, y_train)
 
-    # define hyperparameters relu lr = 0.0001
-    hyper = {"optimizer": "adam", "learning_rate" : 0.0001, "weight_decay": 0.01, "patience": 5, "batch_size": 100, "epochs": 10000}
+    # init memory
+    results = np.zeros((n_iter, 6)) 
+    best_combination = np.zeros((n_iter, 6)) 
+    print("start searching!")
 
-    # get dataloaders
-    data_loader_train = DataLoader(train_dataset, batch_size=hyper["batch_size"], shuffle = True)
-    data_loader_val = DataLoader(val_dataset, batch_size = len(val_dataset), shuffle = True)
+    # start searching
+    for i in range(n_iter):
+        # define hyperparameters 0.0001
+        hyper_parameters = {"optimizer": "adam", 
+                            "learning_rate" : np.random.uniform(0.00001, 0.001), 
+                            "weight_decay": np.random.uniform(0.00001, 0.01), 
+                            "patience": patience, 
+                            "batch_size": np.random.randint(10, 50), 
+                            "epochs": 10000,
+                            "hidden_layer_size": np.random.randint(5, 30), 
+                            "hidden_layers": np.random.randint(2, 8)}
+        
+        # get dataloaders
+        data_loader_train = DataLoader(train_dataset, batch_size = hyper_parameters["batch_size"], shuffle = True)
+        data_loader_val = DataLoader(val_dataset, batch_size = len(val_dataset), shuffle = True)
+
+        # extra data loader to train final model on all data
+        if final_model == True:
+            data_loader_full = DataLoader(train_dataset_full, batch_size = hyper_parameters["batch_size"], shuffle = True)
+
+        # define model 
+        net = MLP(20, 1, hyper_parameters["hidden_layer_size"], hyper_parameters["hidden_layers"]).float()
     
-    # define model 
-    net = MLP(input_size = 20, output_size = 1, hidden_layer_size = 100, hidden_layers =2).float()
+        # criteria
+        cross_entropy = torch.nn.BCELoss()
+        accuracy = f1_score
+
+        res = trainLoop(data_loader_train, data_loader_val, net, cross_entropy, accuracy, hyper_parameters, False)
+
+        # safe results 
+        results[i,:] = res
+        best = np.argmax(results[:,-1])
+        best_par = results[best, :]
+        best_combination[i, :] = best_par
+        
+        print(f"Iteration {i + 1} done")
+        print(f"Current best parameter-set: lr = {best_par[0]}, \
+              weight-decay = {best_par[1]}, \
+              batch_size = {best_par[2]}, \
+              layer-size = {best_par[3]}, \
+              layers = {best_par[4]}, \
+              F1-score = {best_par[5]}")
     
-    # criteria
-    cross_entropy = torch.nn.BCELoss()
-    F1_score = acc
+    # save optimization data 
+    # add time column 
+    results = np.c_[results, np.arange(0,len(results[:,0]))]
+    best_combination = np.c_[best_combination, np.arange(0,len(best_combination[:,0]))]
 
-    # train network
-    trainLoop(data_loader_train, data_loader_val, net, cross_entropy, F1_score, hyper, False) 
+    # save 
+    os.chdir(path_origin)
+    path = os.path.join(path_origin, "optimization_results_MLP")
+    os.makedirs(path, exist_ok=True)
+    os.chdir(path)
+    np.save("optimization_combinations.npy", results)
+    np.save("best_parameter_combination_over_time.npy", best_combination)
+    print("Data saved!")
+    os.chdir(path_origin)
 
+
+    # train and save final model 
+    if final_model:
+        hyper_parameters = {"optimizer": "adam", 
+                            "learning_rate" : best_par[0], 
+                            "weight_decay": best_par[1], 
+                            "patience": patience, 
+                            "batch_size": best_par[2], 
+                            "epochs": 10000,
+                            "hidden_layer_size": best_par[3], 
+                            "hidden_layers": best_par[4]}
+        #model 
+        net = MLP(20, 1, int(hyper_parameters["hidden_layer_size"]), int(hyper_parameters["hidden_layers"])).float()
+        trainLoop(data_loader_full, data_loader_val, net, cross_entropy, accuracy, hyper_parameters, False, safe_model = final_model)
+        
+    return results
+
+                                 
+if __name__ == "__main__":
+    start = time.time()
+    res = random_search_MLP(n_iter, True)
+
+    end = time.time()
+    print("Elapsed time:",)
+    print(f"{(end-start)/60} minutes")
+    
 
 
