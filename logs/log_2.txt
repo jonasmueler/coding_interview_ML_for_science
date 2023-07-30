@@ -1,0 +1,30 @@
+##################################################################################################
+Start preprocessing
+Data loaded
+Preprocessing done
+Train and test data saved
+##################################################################################################
+Start Training XGBoost classifier
+Model saved
+##################################################################################################
+Start Random Search Optimization for Neural Network
+start searching!
+Iteration 1 done
+Current best parameter-set: lr = 0.0007504895747706537,               weight-decay = 0.0008862796235092901,               batch_size = 20.0,               layer-size = 28.0,               layers = 5.0,               F1-validation-score = 0.7387387387387386
+Iteration 2 done
+Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Iteration 3 done
+Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Iteration 4 done
+Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Iteration 5 done
+Current best parameter-set: lr = 0.00012695319117008607,               weight-decay = 0.004248598439408394,               batch_size = 32.0,               layer-size = 18.0,               layers = 2.0,               F1-validation-score = 0.787878787878788
+Data saved!
+Model saved!
+Elapsed time:
+0.19330146710077922 minutes
+##################################################################################################
+Start testing
+Models loaded
+Data loaded
+F1 score MLP: 0.8051948051948051, F1 score XGBoost: 0.8873720136518771

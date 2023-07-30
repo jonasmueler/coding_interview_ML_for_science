@@ -82,6 +82,7 @@ def train_test_split(X: np.ndarray, y: np.ndarray, split_criterion: float) -> li
     np.savetxt("y_train.csv", y_train, delimiter=",") 
     np.savetxt("y_test.csv", y_test, delimiter=",") 
     os.chdir(path_origin) 
+    print("Train and test data saved")
    
     return 
 
@@ -90,6 +91,8 @@ def main(check_missings: bool):
     high level wrapper function
     """
     dataset = get_dataset() ## features (1000, 20), targets (1000, 1), features (pandas dataframe), targets (numpy ndarray)
+    print("Start preprocessing")
+    print("Data loaded")
 
     ## check missings
     if check_missings: 
@@ -97,12 +100,14 @@ def main(check_missings: bool):
 
     ## preprocess_data
     raw_data = preprocess_data(np.array(dataset[0]), dataset[1], dataset[2], True)
-    
+    print("Preprocessing done")
+
     ## split
     train_test_split(raw_data[0], raw_data[1], 0.2)
     
 
 if __name__ == "__main__":
+    print("##################################################################################################")
     main(missings_check)
 
     

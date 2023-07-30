@@ -21,14 +21,17 @@ class MLP(nn.Module):
         layers = []
         # Input layer
         layers.append(nn.Linear(self.input_size, self.hidden_layer_size))
-        layers.append(nn.ReLU())
         layers.append(nn.LayerNorm(self.hidden_layer_size))
+        #layers.append(nn.Dropout(p = 0.5))
+        layers.append(nn.GELU())
 
         # Hidden layers
         for i in range(self.hidden_layers):
             layers.append(nn.Linear(self.hidden_layer_size, self.hidden_layer_size))
-            layers.append(nn.ReLU())
-            layers.append(nn.BatchNorm1d(self.hidden_layer_size))
+            #layers.append(nn.BatchNorm1d(self.hidden_layer_size))
+            layers.append(nn.LayerNorm(self.hidden_layer_size))
+            #layers.append(nn.Dropout(p = 0.5))
+            layers.append(nn.GELU())
             
 
         # Output layer
@@ -51,18 +54,18 @@ class Dataset(Dataset):
     """
     Dataset class necessary for DataLoader class
     """
-    def __init__(self, X_data: np.ndarray, y_data: np.array):
+    def __init__(self, X_data: np.ndarray, y_data: np.array) -> None:
         self.X_data = torch.from_numpy(X_data)
         self.y_data = torch.from_numpy(y_data) 
 
-    def __len__(self):
+    def __len__(self)-> int:
         return len(self.X_data)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> np.ndarray:
         
         return self.X_data[idx], self.y_data[idx]
     
-def get_data_loader(dataset: Dataset, batch_size: int):
+def get_data_loader(dataset: Dataset, batch_size: int)-> DataLoader:
     """
     Creates DataLoader object for stochstic neural network optimization 
     """
@@ -159,6 +162,7 @@ def trainLoop(train_loader: DataLoader,
                 if safe_model:
                     # create folder
                     path = os.path.join(path_origin, "models", "optimizd_MLP.pth")
+                    model.eval()
                     torch.save(model.state_dict(), path)
                     print("Model saved!")
                     os.chdir(path_origin)
@@ -215,8 +219,9 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
     hidden_layer_size 
     hidden_layers
     """
+    print("Start Random Search Optimization for Neural Network")
     # get the data 
-    X_train, y_train, X_test, y_test = get_data()
+    X_train, y_train, _, _ = get_data()
 
     # split train for validtaion set and train set
     val_criterion = 0.90 
@@ -237,7 +242,7 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
                             "weight_decay": np.random.uniform(0.00001, 0.01), 
                             "patience": patience, 
                             "batch_size": np.random.randint(10, 50), 
-                            "epochs": 10000,
+                            "epochs": 1000,
                             "hidden_layer_size": np.random.randint(5, 30), 
                             "hidden_layers": np.random.randint(2, 8)}
         
@@ -270,7 +275,7 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
               batch_size = {best_par[2]}, \
               layer-size = {best_par[3]}, \
               layers = {best_par[4]}, \
-              F1-score = {best_par[5]}")
+              F1-validation-score = {best_par[5]}")
     
     # save optimization data 
     # add time column 
@@ -306,9 +311,9 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
 
                                  
 if __name__ == "__main__":
+    print("##################################################################################################")
     start = time.time()
     res = random_search_MLP(n_iter, True)
-
     end = time.time()
     print("Elapsed time:",)
     print(f"{(end-start)/60} minutes")

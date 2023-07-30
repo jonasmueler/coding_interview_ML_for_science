@@ -4,5 +4,8 @@ missings_check = False
 safe_final_model = True
 
 ## MLP
-n_iter = 160
+n_iter = 60
 patience = 10
+
+
+

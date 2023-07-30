@@ -5,7 +5,7 @@ from config import *
 import matplotlib.pyplot as plt # imported for plotting 
 import os # for directory use
 
-def plot_data():
+def plot_data()-> None:
     # get data 
     os.chdir(os.path.join(path_origin, "optimization_results_MLP"))
     best_pars = np.load(os.path.join(path_origin, "optimization_results_MLP", "best_parameter_combination_over_time.npy"))
@@ -36,10 +36,11 @@ def plot_data():
     os.chdir(path_origin)
     
     # Show the plot
-    plt.show()
+    #plt.show()
 
     return
 
 
 if __name__ == "__main__":
+    print("##################################################################################################")
     plot_data()

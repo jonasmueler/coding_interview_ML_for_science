@@ -6,7 +6,7 @@ from config import *
 ##
 import os
 
-def get_data():
+def get_data()-> np.ndarray:
     """
     Loads data from stored files in data folder
     """
@@ -25,6 +25,8 @@ def main():
     """
     high level wrapper function
     """
+
+    print("Start Training XGBoost classifier")
     X_train, y_train, X_test, y_test = get_data() 
 
     # get model
@@ -37,22 +39,10 @@ def main():
     os.chdir(os.path.join(path, "models"))
     model.save_model('XGBoost.model')
     os.chdir(path_origin)
-
-    # predict on testset
-    preds = model.predict(X_test)
-    f1 = sklearn.metrics.f1_score
-    prec = sklearn.metrics.precision_score
-    recall = sklearn.metrics.recall_score
-    acc = sklearn.metrics.accuracy_score
-
-    print(f1(preds, y_test))
-    print(prec(preds, y_test))
-    print(recall(preds, y_test))
-    print(acc(preds, y_test))
-
-
+    print("Model saved")
 
 if __name__ == "__main__":
+    print("##################################################################################################")
     main()
 
 
