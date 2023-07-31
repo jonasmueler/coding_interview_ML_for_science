@@ -43,13 +43,13 @@ def preprocess_data(X: pd.DataFrame, y: np.ndarray, cats: list, standardize: boo
     # check 
     assert X.shape == X_shape
     
-    
-    # transform numerical variables
-    numericals = X[:, np.invert(cats)]
-    scaler = sklearn.preprocessing.StandardScaler()
-    scaler.fit(numericals)
-    numericals = scaler.transform(numericals)
-    X[:, np.invert(cats)] = numericals
+    if standardize:
+        # transform numerical variables
+        numericals = X[:, np.invert(cats)]
+        scaler = sklearn.preprocessing.StandardScaler()
+        scaler.fit(numericals)
+        numericals = scaler.transform(numericals)
+        X[:, np.invert(cats)] = numericals
     
     # check 
     assert X.shape == X_shape
@@ -99,7 +99,7 @@ def main(check_missings: bool):
         print(check_missings(dataset[0]))
 
     ## preprocess_data
-    raw_data = preprocess_data(np.array(dataset[0]), dataset[1], dataset[2], True)
+    raw_data = preprocess_data(np.array(dataset[0]), dataset[1], dataset[2], center_and_scaling)
     print("Preprocessing done")
 
     ## split

@@ -12,17 +12,16 @@ log_filename="$log_directory/log_${run_number}.txt"
 
 cd /home/jonas/PhD_Ml_science/coding_interview_ML_for_science
 
-# preprocessing
-python3 dataset_preprocessing.py >> "$log_filename"
+# Function to run Python script and log output and errors
+run_python_script() {
+    python_script="$1"
+    python3 "$python_script" >> "$log_filename" 2>&1
+}
 
-# train XGBoost
-python3 XGBoost.py >> "$log_filename"
+# Call the function with your Python scripts
+run_python_script "dataset_preprocessing.py"
+run_python_script "XGBoost.py"
+run_python_script "neural_net_random_search.py"
+run_python_script "MLP_visualizations.py"
+run_python_script "performance_test.py"
 
-# train neural net with random search optimization of hyperparameters
-python3 neural_net_random_search.py >> "$log_filename"
-
-# visualize results of random search
-python3 MLP_visualizations.py >> "$log_filename"
-
-# check testset performance
-python3 performance_test.py >> "$log_filename"

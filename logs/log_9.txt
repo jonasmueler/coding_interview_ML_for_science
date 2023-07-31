@@ -1,0 +1,31 @@
+##################################################################################################
+Start preprocessing
+Data loaded
+Preprocessing done
+Train and test data saved
+##################################################################################################
+Start Training XGBoost classifier
+Model saved
+##################################################################################################
+Start Random Search Optimization for Neural Network
+start searching!
+Iteration 1 done
+Current best parameter-set: lr = 0.00035814479919272233,               weight-decay = 0.005676706151486284,               batch_size = 43.0,               layer-size = 21.0,               layers = 7.0,               F1-validation-score = 0.787878787878788
+Iteration 2 done
+Current best parameter-set: lr = 0.0007289505621245554,               weight-decay = 0.00500184278891266,               batch_size = 21.0,               layer-size = 6.0,               layers = 4.0,               F1-validation-score = 0.832
+Iteration 3 done
+Current best parameter-set: lr = 0.0007289505621245554,               weight-decay = 0.00500184278891266,               batch_size = 21.0,               layer-size = 6.0,               layers = 4.0,               F1-validation-score = 0.832
+Iteration 4 done
+Current best parameter-set: lr = 0.0007289505621245554,               weight-decay = 0.00500184278891266,               batch_size = 21.0,               layer-size = 6.0,               layers = 4.0,               F1-validation-score = 0.832
+Iteration 5 done
+Current best parameter-set: lr = 0.0007289505621245554,               weight-decay = 0.00500184278891266,               batch_size = 21.0,               layer-size = 6.0,               layers = 4.0,               F1-validation-score = 0.832
+Iteration 6 done
+Current best parameter-set: lr = nan,               weight-decay = nan,               batch_size = nan,               layer-size = nan,               layers = nan,               F1-validation-score = nan
+Iteration 7 done
+Current best parameter-set: lr = nan,               weight-decay = nan,               batch_size = nan,               layer-size = nan,               layers = nan,               F1-validation-score = nan
+Iteration 8 done
+Current best parameter-set: lr = nan,               weight-decay = nan,               batch_size = nan,               layer-size = nan,               layers = nan,               F1-validation-score = nan
+Iteration 9 done
+Current best parameter-set: lr = nan,               weight-decay = nan,               batch_size = nan,               layer-size = nan,               layers = nan,               F1-validation-score = nan
+Iteration 10 done
+Current best parameter-set: lr = nan,               weight-decay = nan,               batch_size = nan,               layer-size = nan,               layers = nan,               F1-validation-score = nan

@@ -1,0 +1,28 @@
+/home/jonas/.local/lib/python3.10/site-packages/openml/datasets/functions.py:438: FutureWarning: Starting from Version 0.15 `download_data`, `download_qualities`, and `download_features_meta_data` will all be ``False`` instead of ``True`` by default to enable lazy loading. To disable this message until version 0.15 explicitly set `download_data`, `download_qualities`, and `download_features_meta_data` to a bool while calling `get_dataset`.
+  warnings.warn(
+##################################################################################################
+Start preprocessing
+Data loaded
+Preprocessing done
+Train and test data saved
+##################################################################################################
+Start Training XGBoost classifier
+Model saved
+##################################################################################################
+Start Random Search Optimization for Neural Network
+start searching!
+Iteration 1 done
+Current best parameter-set: lr = 0.0009296456697209158,               weight-decay = 0.000989003675460976,               batch_size = 17.0,               layer-size = 5.0,               layers = 4.0,               F1-validation-score = 0.7678571428571429
+Iteration 2 done
+Current best parameter-set: lr = 0.0007739410084526304,               weight-decay = 0.0015766988763439855,               batch_size = 35.0,               layer-size = 6.0,               layers = 5.0,               F1-validation-score = 0.8166666666666668
+Iteration 3 done
+Current best parameter-set: lr = 0.0007739410084526304,               weight-decay = 0.0015766988763439855,               batch_size = 35.0,               layer-size = 6.0,               layers = 5.0,               F1-validation-score = 0.8166666666666668
+Data saved!
+Model saved!
+Elapsed time:
+0.8103781302769979 minutes
+##################################################################################################
+Start testing
+Models loaded
+Data loaded
+F1 score MLP: 0.8269794721407624, F1 score XGBoost: 0.8873720136518771

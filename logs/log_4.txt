@@ -1,0 +1,17 @@
+##################################################################################################
+Start preprocessing
+Data loaded
+Preprocessing done
+Train and test data saved
+##################################################################################################
+Start Training XGBoost classifier
+Model saved
+##################################################################################################
+Start Random Search Optimization for Neural Network
+start searching!
+Iteration 1 done
+Current best parameter-set: lr = 0.00045691705967238806,               weight-decay = 0.006613661213650404,               batch_size = 46.0,               layer-size = 11.0,               layers = 5.0,               F1-validation-score = 0.787878787878788
+Iteration 2 done
+Current best parameter-set: lr = 0.0001328900556151966,               weight-decay = 0.0006643304049680186,               batch_size = 30.0,               layer-size = 20.0,               layers = 4.0,               F1-validation-score = 0.7938931297709924
+Iteration 3 done
+Current best parameter-set: lr = 0.0008976106215045082,               weight-decay = 0.0027102967668939082,               batch_size = 43.0,               layer-size = 5.0,               layers = 2.0,               F1-validation-score = 0.8253968253968255

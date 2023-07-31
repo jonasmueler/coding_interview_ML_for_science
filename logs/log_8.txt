@@ -1,0 +1,13 @@
+##################################################################################################
+Start preprocessing
+Data loaded
+Preprocessing done
+Train and test data saved
+##################################################################################################
+Start Training XGBoost classifier
+Model saved
+##################################################################################################
+Start testing
+Models loaded
+Data loaded
+F1 score MLP: 0.8410596026490067, F1 score XGBoost: 0.8873720136518771
