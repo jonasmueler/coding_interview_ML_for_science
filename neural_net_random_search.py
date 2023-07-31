@@ -174,6 +174,14 @@ def trainLoop(train_loader: DataLoader,
                         params["hidden_layer_size"], 
                         params["hidden_layers"], 
                         val_loss.item()]
+    
+    # return if no early stopping
+    return [params["learning_rate"], 
+            params["weight_decay"], 
+            params["batch_size"], 
+            params["hidden_layer_size"], 
+            params["hidden_layers"], 
+            val_loss.item()]
         
         
 

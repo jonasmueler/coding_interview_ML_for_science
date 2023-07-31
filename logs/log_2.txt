@@ -1,3 +1,5 @@
+/home/jonas/.local/lib/python3.10/site-packages/openml/datasets/functions.py:438: FutureWarning: Starting from Version 0.15 `download_data`, `download_qualities`, and `download_features_meta_data` will all be ``False`` instead of ``True`` by default to enable lazy loading. To disable this message until version 0.15 explicitly set `download_data`, `download_qualities`, and `download_features_meta_data` to a bool while calling `get_dataset`.
+  warnings.warn(
 ##################################################################################################
 Start preprocessing
 Data loaded
@@ -10,21 +12,51 @@ Model saved
 Start Random Search Optimization for Neural Network
 start searching!
 Iteration 1 done
-Current best parameter-set: lr = 0.0007504895747706537,               weight-decay = 0.0008862796235092901,               batch_size = 20.0,               layer-size = 28.0,               layers = 5.0,               F1-validation-score = 0.7387387387387386
+Current best parameter-set: lr = 0.0004688357433698506,               weight-decay = 0.008379678964620427,               batch_size = 41.0,               layer-size = 14.0,               layers = 5.0,               F1-validation-score = 0.787878787878788
 Iteration 2 done
-Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Current best parameter-set: lr = 0.0004688357433698506,               weight-decay = 0.008379678964620427,               batch_size = 41.0,               layer-size = 14.0,               layers = 5.0,               F1-validation-score = 0.787878787878788
 Iteration 3 done
-Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Current best parameter-set: lr = 0.0005503269617225173,               weight-decay = 0.000189963396903709,               batch_size = 16.0,               layer-size = 21.0,               layers = 4.0,               F1-validation-score = 0.8125000000000001
 Iteration 4 done
-Current best parameter-set: lr = 0.0007642478208934112,               weight-decay = 0.00809951600597699,               batch_size = 27.0,               layer-size = 15.0,               layers = 5.0,               F1-validation-score = 0.7857142857142856
+Current best parameter-set: lr = 0.0005503269617225173,               weight-decay = 0.000189963396903709,               batch_size = 16.0,               layer-size = 21.0,               layers = 4.0,               F1-validation-score = 0.8125000000000001
 Iteration 5 done
-Current best parameter-set: lr = 0.00012695319117008607,               weight-decay = 0.004248598439408394,               batch_size = 32.0,               layer-size = 18.0,               layers = 2.0,               F1-validation-score = 0.787878787878788
+Current best parameter-set: lr = 0.0005503269617225173,               weight-decay = 0.000189963396903709,               batch_size = 16.0,               layer-size = 21.0,               layers = 4.0,               F1-validation-score = 0.8125000000000001
+Iteration 6 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 7 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 8 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 9 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 10 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 11 done
+Current best parameter-set: lr = 0.00034765083552944676,               weight-decay = 0.008801235483545035,               batch_size = 41.0,               layer-size = 18.0,               layers = 7.0,               F1-validation-score = 0.8360655737704917
+Iteration 12 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 13 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 14 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 15 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 16 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 17 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 18 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 19 done
+Current best parameter-set: lr = 0.000930824830288646,               weight-decay = 0.005210382314345502,               batch_size = 43.0,               layer-size = 10.0,               layers = 4.0,               F1-validation-score = 0.8376068376068375
+Iteration 20 done
+Current best parameter-set: lr = 0.0007319160475126066,               weight-decay = 0.007172024020732414,               batch_size = 30.0,               layer-size = 26.0,               layers = 7.0,               F1-validation-score = 0.8387096774193548
 Data saved!
 Model saved!
 Elapsed time:
-0.19330146710077922 minutes
+5.246407147248586 minutes
 ##################################################################################################
 Start testing
 Models loaded
 Data loaded
-F1 score MLP: 0.8051948051948051, F1 score XGBoost: 0.8873720136518771
+F1 score MLP: 0.8294117647058824, F1 score XGBoost: 0.8873720136518771
