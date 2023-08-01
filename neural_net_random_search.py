@@ -175,6 +175,15 @@ def trainLoop(train_loader: DataLoader,
                         params["hidden_layers"], 
                         val_loss.item()]
     
+    # save final optimized model
+    if safe_model:
+        # create folder
+        path = os.path.join(path_origin, "models", "optimizd_MLP.pth")
+        model.eval()
+        torch.save(model.state_dict(), path)
+        print("Model saved!")
+        os.chdir(path_origin)
+    
     # return if no early stopping
     return [params["learning_rate"], 
             params["weight_decay"], 
@@ -250,7 +259,7 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
                             "weight_decay": np.random.uniform(0.00001, 0.01), 
                             "patience": patience, 
                             "batch_size": np.random.randint(10, 50), 
-                            "epochs": 1000,
+                            "epochs": 500,
                             "hidden_layer_size": np.random.randint(5, 30), 
                             "hidden_layers": np.random.randint(2, 8)}
         
@@ -308,7 +317,7 @@ def random_search_MLP(n_iter: int, final_model: bool) -> np.ndarray:
                             "weight_decay": best_par[1], 
                             "patience": patience, 
                             "batch_size": best_par[2], 
-                            "epochs": 10000,
+                            "epochs": 500,
                             "hidden_layer_size": best_par[3], 
                             "hidden_layers": best_par[4]}
         #model 
